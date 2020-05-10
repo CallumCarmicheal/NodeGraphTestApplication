@@ -26,9 +26,12 @@ namespace WpfNodeGraphTest.NGraph {
         #endregion // Properites
 
         #region Constructor
-
-        public VariableNode(NodeGraphManager ngm, Guid guid, FlowChart flowChart, CNodeType nodeType)
-                : base(ngm, guid, flowChart, nodeType) {
+#if (Debug_OldBugTesting)
+        public VariableNode(Guid guid, FlowChart flowChart, CNodeType nodeType) : base(guid, flowChart, nodeType)
+#else
+        public VariableNode(NodeGraphManager ngm, Guid guid, FlowChart flowChart, CNodeType nodeType) : base(ngm, guid, flowChart, nodeType)
+#endif
+        {
             Header = typeof(T).Name;
             HeaderBackgroundColor = Brushes.Black;
             HeaderFontColor = Brushes.White;

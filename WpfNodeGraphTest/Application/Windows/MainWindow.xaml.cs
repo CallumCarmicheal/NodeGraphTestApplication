@@ -1,11 +1,11 @@
-﻿using System;
+﻿using NodeGraph;
+using System;
 using System.Linq;
 using System.Windows;
-using Xceed.Wpf.AvalonDock.Controls;
+using WpfNodeGraphTest.Application.Views;
 using Xceed.Wpf.AvalonDock.Layout;
 
-namespace WpfNodeGraphTest.Application {
-
+namespace WpfNodeGraphTest.Application.Windows {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -15,7 +15,8 @@ namespace WpfNodeGraphTest.Application {
             InitializeComponent();
         }
 
-        AnchorableShowStrategy AnchorStrat = AnchorableShowStrategy.Top;
+        private AnchorableShowStrategy AnchorStrat = AnchorableShowStrategy.Top;
+
         private void makeDocument_Click(object sender, RoutedEventArgs e) {
             //LayoutAnchorable la = new LayoutAnchorable { Title = "Graph Editor", FloatingHeight = 400, FloatingWidth = 500, Content = new GraphEditor() };
             //la.AddToLayout(dockingManager, AnchorStrat);
@@ -28,7 +29,7 @@ namespace WpfNodeGraphTest.Application {
 
         private void Window_Loaded(object sender, RoutedEventArgs e) {
             _anchorStrat.ItemsSource = Enum.GetValues(typeof(AnchorableShowStrategy)).Cast<AnchorableShowStrategy>();
-            _anchorStrat.SelectedIndex = 0;
+            _anchorStrat.SelectedValue = AnchorableShowStrategy.Top;
         }
 
         private void newAnchoredGraph_Click(object sender, RoutedEventArgs e) {
@@ -37,9 +38,28 @@ namespace WpfNodeGraphTest.Application {
         }
 
         private void newFLoatingGraph_Click(object sender, RoutedEventArgs e) {
-            LayoutAnchorable la = new LayoutAnchorable { Title = "Graph Editor: Floating", FloatingHeight = 400, FloatingWidth = 500, Content = new GraphEditor(), CanClose=true };
+            LayoutAnchorable la = new LayoutAnchorable { Title = "Graph Editor: Floating", FloatingHeight = 400, FloatingWidth = 500, Content = new GraphEditor(), CanClose = true };
             la.AddToLayout(dockingManager, AnchorStrat);
             la.Float();
+        }
+
+        private void current_Click(object sender, RoutedEventArgs e) {
+            if (dockingManager.ActiveContent != null && dockingManager.ActiveContent is GraphEditor) {
+                var graph = dockingManager.ActiveContent as GraphEditor;
+
+#if (Debug_OldBugTesting)
+                NodeGraphManager.AddScreenLog(graph.FlowChart, "Hello world!");
+#else
+                graph.NodeGraphManager.AddScreenLog(graph.FlowChart, $"Found + {graph.ViewModel.FlowChartViewModel.InstanceGuid}!", 2000);
+#endif
+            }
+        }
+
+        private void makeGraphEditorProp_Click(object sender, RoutedEventArgs e) {
+            //LayoutAnchorable la = new LayoutAnchorable { Title = "Graph Editor Property Dependancy: Floating", 
+            //    FloatingHeight = 400, FloatingWidth = 500, Content = new GraphEditorPropDepen(), CanClose = true };
+            //la.AddToLayout(dockingManager, AnchorStrat);
+            //la.Float();
         }
     }
 }

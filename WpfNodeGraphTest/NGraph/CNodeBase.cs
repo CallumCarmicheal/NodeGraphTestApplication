@@ -25,12 +25,16 @@ namespace WpfNodeGraphTest.NGraph {
 
 		#region Constructor
 
+#if (Debug_OldBugTesting)
+		public CNodeBase(Guid guid, FlowChart flowChart, CNodeType nodeType) : base(guid, flowChart) {
+#else
 		public CNodeBase(NodeGraphManager ngm, Guid guid, FlowChart flowChart, CNodeType nodeType) : base(ngm, guid, flowChart) {
+#endif
 			_NodeType = nodeType;
 			AllowEditingHeader = false;
 		}
 
-		#endregion // Constructor
+#endregion // Constructor
 
 	}
 }

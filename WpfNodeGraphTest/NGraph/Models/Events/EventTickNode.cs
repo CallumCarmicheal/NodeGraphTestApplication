@@ -12,9 +12,23 @@ namespace WpfNodeGraphTest.NGraph.Models.Events {
 	[NodeFlowPort("Output", "", false)]
 	[CNodeDescriptor(title: "Event Tick")]
 	public class EventTickNode : CNodeBase {
+#if (Debug_OldBugTesting)
+		public EventTickNode(Guid guid, FlowChart flowChart) : base( guid, flowChart, CNodeType.EventTick) {
+#else
 		public EventTickNode(NodeGraphManager ngm, Guid guid, FlowChart flowChart) : base(ngm, guid, flowChart, CNodeType.EventTick) {
+#endif
+
 			Header = "Event: Tick";
-			HeaderBackgroundColor = new SolidColorBrush(Color.FromRgb(92,20,15));
+			HeaderBackgroundColor = new SolidColorBrush(Color.FromRgb(92, 20, 15));
+
+			//var color = Color.FromRgb(92, 20, 15);
+			//var gradient = new LinearGradientBrush();
+			//gradient.GradientStops.Add(new GradientStop() { Color = color, Offset = 0 });
+			//gradient.GradientStops.Add(new GradientStop() { Color = Color.FromArgb(255, color.R, color.G, color.B), Offset = 0.8 });
+			//gradient.GradientStops.Add(new GradientStop() { Color = Color.FromArgb(80, color.R, color.G, color.B), Offset = 0.96 });
+			//gradient.GradientStops.Add(new GradientStop() { Color = Color.FromArgb(40, color.R, color.G, color.B), Offset = 1.0 });
+
+			//HeaderBackgroundColor = gradient;
 		}
 
 		// ====================================================

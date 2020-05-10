@@ -23,10 +23,41 @@ namespace WpfNodeGraphTest.NGraph.Models.Functions {
 		// ====================================================
 		// ====  Functions
 
-
-		public FnPrint(NodeGraphManager ngm, Guid guid, FlowChart flowChart) : base(ngm, guid, flowChart, CNodeType.FunctionPrint) {
+#if (Debug_OldBugTesting)
+		public FnPrint(Guid guid, FlowChart flowChart) : base(guid, flowChart, CNodeType.FunctionPrint)
+#else
+		public FnPrint(NodeGraphManager ngm, Guid guid, FlowChart flowChart) : base(ngm, guid, flowChart, CNodeType.FunctionPrint)
+#endif
+		{
 			Header = "Function: Print";
 			HeaderBackgroundColor = new SolidColorBrush(Color.FromRgb(71,116,143));
+
+			//var gradient = new LinearGradientBrush();
+			//for(int x = 0; x < 10; x++) 
+			//	gradient.GradientStops.Add(new GradientStop(Rainbow(x), x / 10));
+
+			//HeaderBackgroundColor = gradient;
+		}
+
+		private Color Rainbow(float progress) {
+			float div = (Math.Abs(progress % 1) * 6);
+			byte ascending = (byte)((div % 1) * 255);
+			byte descending = (byte)(255 - ascending);
+
+			switch ((int)div) {
+			case 0:
+				return Color.FromArgb(255, 255, ascending, 0);
+			case 1:
+				return Color.FromArgb(255, descending, 255, 0);
+			case 2:
+				return Color.FromArgb(255, 0, 255, ascending);
+			case 3:
+				return Color.FromArgb(255, 0, descending, 255);
+			case 4:
+				return Color.FromArgb(255, ascending, 0, 255);
+			default: // case 5:
+				return Color.FromArgb(255, 255, 0, descending);
+			}
 		}
 
 		// ====================================================

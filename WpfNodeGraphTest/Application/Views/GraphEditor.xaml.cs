@@ -7,60 +7,56 @@ using System.Windows.Controls;
 
 using WpfNodeGraphTest.NGraph;
 
-namespace WpfNodeGraphTest.Application {
+namespace WpfNodeGraphTest.Application.Views {
 
     /// <summary>
     /// Interaction logic for GraphEditor.xaml
     /// </summary>
     public partial class GraphEditor {
+        public GraphEditorViewModel ViewModel { get => (GraphEditorViewModel)DataContext; set => DataContext = value; }
 
         public GraphEditor() {
+            ViewModel = new GraphEditorViewModel();
+
             InitializeComponent();
         }
 
-        public NodeGraph.ViewModel.FlowChartViewModel FlowChartViewModel {
-            get { return (NodeGraph.ViewModel.FlowChartViewModel)GetValue(FlowChartViewModelProperty); }
-            set { SetValue(FlowChartViewModelProperty, value); }
-        }
+        public NodeGraphManager NodeGraphManager { get; private set; }
+        public FlowChart FlowChart { get; set; }
 
-        public static readonly DependencyProperty FlowChartViewModelProperty =
-            DependencyProperty.Register("FlowChartViewModel", typeof(NodeGraph.ViewModel.FlowChartViewModel),
-            typeof(GraphEditor), new PropertyMetadata(null));
-
-        private NodeGraphManager nodeGraphManager;
         private void Window_Loaded(object sender, RoutedEventArgs e) {
-            if (nodeGraphManager == null) {
-                nodeGraphManager = new NodeGraphManager();
+            if (NodeGraphManager == null) {
+                NodeGraphManager = new NodeGraphManager();
 
-                FlowChart flowChart = nodeGraphManager.CreateFlowChart(false, Guid.NewGuid(), typeof(FlowChart));
-                FlowChartViewModel = flowChart.ViewModel;
+                FlowChart = NodeGraphManager.CreateFlowChart(false, Guid.NewGuid(), typeof(FlowChart));
+                ViewModel.FlowChartViewModel = FlowChart.ViewModel;
 
-                nodeGraphManager.BuildFlowChartContextMenu += NodeGraphManager_BuildFlowChartContextMenu;
-                nodeGraphManager.BuildNodeContextMenu += NodeGraphManager_BuildNodeContextMenu;
-                nodeGraphManager.BuildFlowPortContextMenu += NodeGraphManager_BuildFlowPortContextMenu;
-                nodeGraphManager.BuildPropertyPortContextMenu += NodeGraphManager_BuildPropertyPortContextMenu;
+                NodeGraphManager.BuildFlowChartContextMenu += NodeGraphManager_BuildFlowChartContextMenu;
+                NodeGraphManager.BuildNodeContextMenu += NodeGraphManager_BuildNodeContextMenu;
+                NodeGraphManager.BuildFlowPortContextMenu += NodeGraphManager_BuildFlowPortContextMenu;
+                NodeGraphManager.BuildPropertyPortContextMenu += NodeGraphManager_BuildPropertyPortContextMenu;
             } else {
-                // todo some shit
                 var x = 0;
             }
         }
 
         private Point _ContextMenuLocation;
+
         private bool NodeGraphManager_BuildFlowChartContextMenu(object sender, BuildContextMenuArgs args) {
             ItemCollection items = args.ContextMenu.Items;
             _ContextMenuLocation = args.ModelSpaceMouseLocation;
 
             items.Clear();
-            foreach(var nodeType in CNodeList.NodeTypes) {
+            foreach (var nodeType in CNodeList.NodeTypes) {
                 MenuItem menuItem = new MenuItem();
 
                 var NodeAttrs = nodeType.GetCustomAttributes(typeof(NodeAttribute), false) as NodeAttribute[];
-                if(1 != NodeAttrs.Length)
+                if (1 != NodeAttrs.Length)
                     throw new ArgumentException(string.Format("{0} must have NodeAttribute", nodeType.Name));
 
                 var NodeDescriptor = nodeType.GetCustomAttributes(typeof(CNodeDescriptor), false) as CNodeDescriptor[];
 
-                if(NodeDescriptor.Length > 0)
+                if (NodeDescriptor.Length > 0)
                     menuItem.Header = "Create " + NodeDescriptor[0].Title;
                 else menuItem.Header = "Create " + nodeType.Name;
 
@@ -77,13 +73,10 @@ namespace WpfNodeGraphTest.Application {
             MenuItem menuItem = sender as MenuItem;
             Type nodeType = menuItem.CommandParameter as Type;
 
-            NodeGraph.View.FlowChartView flowChartView = FlowChartViewModel.View;
-
-            Point nodePos = flowChartView.ZoomAndPan.MatrixInv.Transform(
-                new Point(_ContextMenuLocation.X, _ContextMenuLocation.Y));
-
-            Node node = nodeGraphManager.CreateNode(
-                false, Guid.NewGuid(), FlowChartViewModel.Model, nodeType, nodePos.X, nodePos.Y, 0);
+            NodeGraph.View.FlowChartView flowChartView = ViewModel.FlowChartViewModel.View;
+            
+            NodeGraphManager.CreateNode(
+                false, Guid.NewGuid(), ViewModel.FlowChartViewModel.Model, nodeType, _ContextMenuLocation.X, _ContextMenuLocation.Y, 0);
         }
 
         private bool NodeGraphManager_BuildNodeContextMenu(object sender, BuildContextMenuArgs args) {
@@ -92,16 +85,16 @@ namespace WpfNodeGraphTest.Application {
 
             items.Clear();
 
-            foreach(var nodeType in CNodeList.NodeTypes) {
+            foreach (var nodeType in CNodeList.NodeTypes) {
                 MenuItem menuItem = new MenuItem();
 
                 var NodeAttrs = nodeType.GetCustomAttributes(typeof(NodeAttribute), false) as NodeAttribute[];
-                if(1 != NodeAttrs.Length)
+                if (1 != NodeAttrs.Length)
                     throw new ArgumentException(string.Format("{0} must have NodeAttribute", nodeType.Name));
 
                 var NodeDescriptor = nodeType.GetCustomAttributes(typeof(CNodeDescriptor), false) as CNodeDescriptor[];
 
-                if(NodeDescriptor.Length > 0)
+                if (NodeDescriptor.Length > 0)
                     menuItem.Header = "Create " + NodeDescriptor[0].Title;
                 else menuItem.Header = "Create " + nodeType.Name;
 

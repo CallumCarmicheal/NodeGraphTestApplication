@@ -1,0 +1,16 @@
+﻿<UserControl x:Class="WpfNodeGraphTest.Application.Views.GraphEditor"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:ngv="clr-namespace:NodeGraph.View;assembly=NodeGraph"
+             xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock" 
+             xmlns:local="clr-namespace:WpfNodeGraphTest.Application.Views"
+             mc:Ignorable="d"
+             Loaded="Window_Loaded"
+             
+             d:DataContext="{d:DesignInstance Type=local:GraphEditorViewModel, IsDesignTimeCreatable=True}">
+    <Grid>
+        <ngv:FlowChartView DataContext="{Binding FlowChartViewModel, UpdateSourceTrigger=PropertyChanged}" />
+    </Grid>
+</UserControl>

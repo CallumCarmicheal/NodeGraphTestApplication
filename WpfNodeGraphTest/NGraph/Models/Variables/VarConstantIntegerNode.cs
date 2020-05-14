@@ -9,15 +9,19 @@ using System.Windows.Media;
 
 namespace WpfNodeGraphTest.NGraph.Models.Variables {
     [Node]
-    public class VarIntegerNode : VariableNode<int> {
+    public class VarConstantIntegerNode : CVariableNode<int> {
 #if (Debug_OldBugTesting)
         public VarIntegerNode(Guid guid, FlowChart flowChart) : base(guid, flowChart, CNodeType.VarInteger) {
 #else
-        public VarIntegerNode(NodeGraphManager ngm, Guid guid, FlowChart flowChart) : base(ngm, guid, flowChart, CNodeType.VarInteger) {
+        public VarConstantIntegerNode(NodeGraphManager ngm, Guid guid, FlowChart flowChart) : base(ngm, guid, flowChart, CNodeType.VarConstantInteger) {
 #endif
             //
             //HeaderBackgroundColor = new SolidColorBrush(Color.FromRgb(157, 248, 67));
             HeaderBackgroundColor = new SolidColorBrush(Color.FromRgb(71,146,0));
+        }
+
+        public override string CompileAsJavascript() {
+            return "" + Value;
         }
     }
 }

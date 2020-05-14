@@ -5,12 +5,39 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:ngv="clr-namespace:NodeGraph.View;assembly=NodeGraph"
              xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock" 
-             xmlns:local="clr-namespace:WpfNodeGraphTest.Application.Views"
+             xmlns:local="clr-namespace:WpfNodeGraphTest.Application.Views" xmlns:controls="clr-namespace:WpfNodeGraphTest.Application.Controls"
              mc:Ignorable="d"
              Loaded="Window_Loaded"
              
-             d:DataContext="{d:DesignInstance Type=local:GraphEditorViewModel, IsDesignTimeCreatable=True}">
+             d:DataContext="{d:DesignInstance Type=local:GraphEditorViewModel, IsDesignTimeCreatable=True}"
+            d:DesignHeight="300" d:DesignWidth="300">
+
     <Grid>
-        <ngv:FlowChartView DataContext="{Binding FlowChartViewModel, UpdateSourceTrigger=PropertyChanged}" />
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <StackPanel>
+            <!--<Button Content="Save to XML" Click="saveToXmlClicked"/>-->
+        </StackPanel>
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="3*" />
+                <RowDefinition Height="2" />
+                <RowDefinition Height="1*" />
+            </Grid.RowDefinitions>
+
+            <ngv:FlowChartView DataContext="{Binding FlowChartViewModel, UpdateSourceTrigger=PropertyChanged}" />
+
+            <GridSplitter Grid.Row="1"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Background="Gray" 
+                ShowsPreview="False"
+                Height="10" />
+            
+            <controls:AvalonEdit Grid.Row="2" x:Name="avalonEditer"/>
+        </Grid>
     </Grid>
+
 </UserControl>

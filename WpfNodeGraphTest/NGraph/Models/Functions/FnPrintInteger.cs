@@ -9,10 +9,10 @@ using System.Windows.Media;
 
 namespace WpfNodeGraphTest.NGraph.Models.Functions {
     [Node]
-    [CNodeDescriptor("Function: Print Text")]
+    [CNodeDescriptor("Function: Print Integer")]
     [NodeFlowPort("Input", "", true)]
     [NodeFlowPort("Output", "", false)]
-    public class FnPrint : CNodeBase {
+    public class FnPrintInteger : CNodeBase {
 		// ====================================================
 		// ====  Properties
 
@@ -26,10 +26,10 @@ namespace WpfNodeGraphTest.NGraph.Models.Functions {
 #if (Debug_OldBugTesting)
 		public FnPrint(Guid guid, FlowChart flowChart) : base(guid, flowChart, CNodeType.FunctionPrint)
 #else
-		public FnPrint(NodeGraphManager ngm, Guid guid, FlowChart flowChart) : base(ngm, guid, flowChart, CNodeType.FunctionPrint)
+		public FnPrintInteger(NodeGraphManager ngm, Guid guid, FlowChart flowChart) : base(ngm, guid, flowChart, CNodeType.FunctionPrintInteger)
 #endif
 		{
-			Header = "Function: Print";
+			Header = "Function: Print Integer";
 			HeaderBackgroundColor = new SolidColorBrush(Color.FromRgb(71,116,143));
 
 			//var gradient = new LinearGradientBrush();
@@ -37,27 +37,6 @@ namespace WpfNodeGraphTest.NGraph.Models.Functions {
 			//	gradient.GradientStops.Add(new GradientStop(Rainbow(x), x / 10));
 
 			//HeaderBackgroundColor = gradient;
-		}
-
-		private Color Rainbow(float progress) {
-			float div = (Math.Abs(progress % 1) * 6);
-			byte ascending = (byte)((div % 1) * 255);
-			byte descending = (byte)(255 - ascending);
-
-			switch ((int)div) {
-			case 0:
-				return Color.FromArgb(255, 255, ascending, 0);
-			case 1:
-				return Color.FromArgb(255, descending, 255, 0);
-			case 2:
-				return Color.FromArgb(255, 0, 255, ascending);
-			case 3:
-				return Color.FromArgb(255, 0, descending, 255);
-			case 4:
-				return Color.FromArgb(255, ascending, 0, 255);
-			default: // case 5:
-				return Color.FromArgb(255, 255, 0, descending);
-			}
 		}
 
 		// ====================================================
@@ -80,6 +59,39 @@ namespace WpfNodeGraphTest.NGraph.Models.Functions {
 				connector.OnExecute();
 				connector.OnPostExecute();
 			}
+		}
+
+
+
+
+		// ====================================================
+		// ==== Javascript
+
+		public override string CompileAsJavascript() {
+			var format = "Print({0});\n";
+			string output = "";
+
+			if (InputPropertyPorts[0].Connectors.Count > 0 && InputPropertyPorts[0].Connectors[0].StartPort != null) {
+				// Get the integer
+				var owner = this.InputPropertyPorts[0].Connectors[0].StartPort.Owner;
+				if (owner != null && owner is CNodeBase) 
+					output = string.Format(format, (owner as CNodeBase).CompileAsJavascript());
+			} else {
+				output = string.Format(format, Integer);
+			}
+
+
+			// We have more calls to make
+			if (OutputFlowPorts[0].Connectors.Count > 0 && this.OutputFlowPorts[0].Connectors[0].EndPort != null) {
+				var owner = this.OutputFlowPorts[0].Connectors[0].EndPort.Owner;
+				if (!(owner is CNodeBase))
+					return $"application.Tick(() => {{ /** ... **/ }});";
+
+				var code = (owner as CNodeBase).CompileAsJavascript();
+				output += code;
+			}
+
+			return output;
 		}
 	}
 }

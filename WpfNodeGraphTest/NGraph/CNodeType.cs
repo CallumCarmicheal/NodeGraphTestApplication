@@ -14,15 +14,19 @@ namespace WpfNodeGraphTest.NGraph {
         // ===============================
         // Functions
 
-        FunctionPrint,
+        FunctionPrintInteger,
+        FunctionPrintString,
 
         // ===============================
         // Variable types
 
-        VarInteger,
+        VarConstantInteger,
+        VarConstantString,
 
         // ===============================
         // Logical operators
+
+        OpIntegerAdd,
 
         // ===============================
     }

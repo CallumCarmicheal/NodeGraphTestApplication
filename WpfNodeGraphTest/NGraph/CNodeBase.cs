@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace WpfNodeGraphTest.NGraph {
-    public class CNodeBase : Node {
+    public abstract class CNodeBase : Node {
 		#region Properties
 
 		private CNodeType _NodeType;
@@ -34,7 +34,40 @@ namespace WpfNodeGraphTest.NGraph {
 			AllowEditingHeader = false;
 		}
 
-#endregion // Constructor
+		#endregion // Constructor
 
+		#region Events
+
+		public override void OnCreate() {
+			base.OnCreate();
+
+			foreach (var x in InputFlowPorts)
+				x.Connectors.CollectionChanged += CollectionChanged;
+
+			foreach (var x in OutputFlowPorts)
+				x.Connectors.CollectionChanged += CollectionChanged;
+
+			foreach (var x in InputPropertyPorts)
+				x.Connectors.CollectionChanged += CollectionChanged;
+
+			foreach (var x in OutputPropertyPorts)
+				x.Connectors.CollectionChanged += CollectionChanged;
+		}
+
+		private void CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
+			StateChanged?.Invoke(this);
+		}
+
+		#endregion
+
+		public abstract string CompileAsJavascript();
+
+
+		public delegate void DNodeStateChanged(CNodeBase node);
+		public event DNodeStateChanged StateChanged;
+
+		protected void RegisterStateChange() {
+			StateChanged?.Invoke(this);
+		}
 	}
 }

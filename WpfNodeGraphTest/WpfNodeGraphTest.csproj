@@ -48,6 +48,12 @@
     <Reference Include="CommonServiceLocator, Version=2.0.2.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
       <HintPath>..\packages\CommonServiceLocator.2.0.2\lib\net47\CommonServiceLocator.dll</HintPath>
     </Reference>
+    <Reference Include="ICSharpCode.AvalonEdit, Version=6.0.1.278, Culture=neutral, PublicKeyToken=9cc39be672370310, processorArchitecture=MSIL">
+      <HintPath>..\packages\AvalonEdit.6.0.1\lib\net45\ICSharpCode.AvalonEdit.dll</HintPath>
+    </Reference>
+    <Reference Include="Jsbeautifier, Version=0.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Jsbeautifier.0.0.1\lib\netstandard2.0\Jsbeautifier.dll</HintPath>
+    </Reference>
     <Reference Include="PropertyTools, Version=2.0.1.0, Culture=neutral, PublicKeyToken=ea0c9f2b460934d0, processorArchitecture=MSIL">
       <HintPath>..\packages\PropertyTools.Wpf.2.0.1\lib\net45\PropertyTools.dll</HintPath>
     </Reference>
@@ -56,6 +62,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\MvvmLightLibs.5.4.1.1\lib\net45\System.Windows.Interactivity.dll</HintPath>
     </Reference>
@@ -92,6 +99,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ImageFormat.cs" />
+    <Compile Include="NGraph\Models\Functions\FnPrintString.cs" />
+    <Compile Include="NGraph\Models\Operator\OpStringConcat.cs" />
+    <Compile Include="NGraph\Models\Operator\OpIntegerAdd.cs" />
+    <Compile Include="NGraph\Models\Variables\VarConstantStringNode.cs" />
+    <Compile Include="ResourceHelper.cs" />
+    <Page Include="Application\Controls\AvalonEdit.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Application\Views\GraphEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -104,6 +121,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Application\Controls\AvalonEdit.xaml.cs">
+      <DependentUpon>AvalonEdit.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Application\Controls\AvalonEditSettings.cs" />
     <Compile Include="Application\Views\GraphEditor.xaml.cs">
       <DependentUpon>GraphEditor.xaml</DependentUpon>
     </Compile>
@@ -118,11 +139,12 @@
     <Compile Include="NGraph\CNodeBase.cs" />
     <Compile Include="NGraph\CNodeDescriptor.cs" />
     <Compile Include="NGraph\CNodeList.cs" />
+    <Compile Include="NGraph\CNodeStart.cs" />
     <Compile Include="NGraph\CNodeType.cs" />
     <Compile Include="NGraph\Models\Events\EventTickNode.cs" />
-    <Compile Include="NGraph\Models\Functions\FnPrint.cs" />
-    <Compile Include="NGraph\Models\Variables\VarIntegerNode.cs" />
-    <Compile Include="NGraph\VariableNode.cs" />
+    <Compile Include="NGraph\Models\Functions\FnPrintInteger.cs" />
+    <Compile Include="NGraph\Models\Variables\VarConstantIntegerNode.cs" />
+    <Compile Include="NGraph\CVariableNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -140,18 +162,20 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\CSharp-Dark.xshd" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <EmbeddedResource Include="Resources\CSharp-Light.xshd" />
+    <EmbeddedResource Include="Resources\Javascript-Dark.xshd" />
+    <EmbeddedResource Include="Resources\Javascript-Light.xshd" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="NGraph\Models\Operator\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\NodeGraph\NodeGraph.csproj">
       <Project>{b650df81-3a89-4807-987b-aeee0e9ae242}</Project>

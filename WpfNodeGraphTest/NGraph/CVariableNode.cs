@@ -9,7 +9,7 @@ using System.Windows.Media;
 
 namespace WpfNodeGraphTest.NGraph {
     [Node()]
-    public class VariableNode<T> : CNodeBase {
+    public abstract class CVariableNode<T> : CNodeBase {
         #region Propertiets
 
         private object _Value;
@@ -23,13 +23,15 @@ namespace WpfNodeGraphTest.NGraph {
             }
         }
 
+        public NodePropertyPort ValuePort { get; private set; }
+
         #endregion // Properites
 
         #region Constructor
 #if (Debug_OldBugTesting)
         public VariableNode(Guid guid, FlowChart flowChart, CNodeType nodeType) : base(guid, flowChart, nodeType)
 #else
-        public VariableNode(NodeGraphManager ngm, Guid guid, FlowChart flowChart, CNodeType nodeType) : base(ngm, guid, flowChart, nodeType)
+        public CVariableNode(NodeGraphManager ngm, Guid guid, FlowChart flowChart, CNodeType nodeType) : base(ngm, guid, flowChart, nodeType)
 #endif
         {
             Header = typeof(T).Name;
@@ -45,17 +47,30 @@ namespace WpfNodeGraphTest.NGraph {
         public override void OnCreate() {
             Type type = typeof(T);
 
-            NodePropertyPort port = NodeGraphManager.CreateNodePropertyPort(
-                false, Guid.NewGuid(), this, false, type, Activator.CreateInstance(type), "Value", true, null, "");
+            ValuePort = NodeGraphManager.CreateNodePropertyPort(
+                false, Guid.NewGuid(), this, 
+                false, type, CreateDefaultInstance(), "Value", true, null, "");
 
-            port.DynamicPropertyPortValueChanged += ValuePort_PropertyPortValueChanged;
+            ValuePort.PropertyChanged += ValuePort_PropertyChanged;
+            ValuePort.DynamicPropertyPortValueChanged += ValuePort_PropertyPortValueChanged;
 
             base.OnCreate();
         }
 
+        public virtual T CreateDefaultInstance() {
+            Type type = typeof(T);
+            return (T)Activator.CreateInstance(type);
+        }
+
+        private void ValuePort_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            RegisterStateChange();
+        }
+
         private void ValuePort_PropertyPortValueChanged(NodePropertyPort port, object prevValue, object newValue) {
             Value = (T)port.Value;
+            RegisterStateChange();
         }
+
 
         #endregion // Events
     }

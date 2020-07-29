@@ -89,7 +89,7 @@ namespace WpfNodeGraphTest.NGraph.Models.Operator {
                 txtRhs = $"\"{PortRHS.Value}\"";
             }
 
-            return "({0}) + ({1}) + ({2})".Format(txtLhs, txtSeperator, txtRhs);
+            return string.Format("({0}) + ({1}) + ({2})", txtLhs, txtSeperator, txtRhs);
         }
     }
 }

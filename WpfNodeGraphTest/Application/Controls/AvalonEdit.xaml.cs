@@ -37,7 +37,8 @@ namespace WpfNodeGraphTest.Application.Controls {
 
         private AvalonEditGlobalStyling.ColorStyle colorStyle = AvalonEditGlobalStyling.ColorStyle.Dark;
         private AvalonEditGlobalStyling.StyleSetting styleSettings = AvalonEditGlobalStyling.StyleSetting.UseGlobal;
-
+        private AvalonEditGlobalStyling.SyntaxLanguage syntaxLanguage = AvalonEditGlobalStyling.SyntaxLanguage.CSharp;
+        
         public AvalonEditGlobalStyling.ColorStyle ColorStyle {
             get {
                 if (styleSettings == AvalonEditGlobalStyling.StyleSetting.UseGlobal)
@@ -71,6 +72,17 @@ namespace WpfNodeGraphTest.Application.Controls {
             }
         }
 
+        public AvalonEditGlobalStyling.SyntaxLanguage Syntax {
+            get {
+                return syntaxLanguage;
+            }
+
+            set {
+                syntaxLanguage = value;
+                reloadStyle();
+            }
+        }
+
         #endregion // Properties
 
         #region Theming
@@ -80,24 +92,36 @@ namespace WpfNodeGraphTest.Application.Controls {
 
         private void AvalonEditGlobalStyling_StyleChanged(AvalonEditGlobalStyling.ColorStyle newStyle) => reloadStyle();
 
-
-
         private void reloadStyle() {
-            var languageFile = "";
+            string languageFile;
+
+            switch (this.syntaxLanguage) {
+            case AvalonEditGlobalStyling.SyntaxLanguage.Javascript:
+                languageFile = "Resources.Javascript";
+                break;
+            case AvalonEditGlobalStyling.SyntaxLanguage.XML:
+                languageFile = "Resources.XmlDoc";
+                break;
+
+            default:
+            case AvalonEditGlobalStyling.SyntaxLanguage.CSharp:
+                languageFile = "Resources.CSharp";
+                break;
+            }
 
             // Check if we are using the dark theme
             bool useDarkTheme = ColorStyle == AvalonEditGlobalStyling.ColorStyle.Dark;
 
             // If we are using the dark theme load Resources/CSharp-Dark.xshd
             if (useDarkTheme) {
-                languageFile = "Resources.CSharp-Dark.xshd";
+                languageFile += "-Dark.xshd";
                 themeBackground = new SolidColorBrush(Color.FromArgb(0xff, 0x35, 0x35, 0x36));
                 themeTextDefault = new SolidColorBrush(Color.FromArgb(0xff, 0xab, 0xb2, 0xbf));
             }
 
             // If we are using the light theme load Resources/CSharp-Light.xshd
             else {
-                languageFile = "Resources.CSharp-Light.xshd";
+                languageFile += "-Light.xshd";
                 themeBackground = new SolidColorBrush(Color.FromArgb(0xff, 0xff, 0xff, 0xff));
                 themeTextDefault = new SolidColorBrush(Color.FromArgb(0xff, 0x35, 0x35, 0x36));
             }

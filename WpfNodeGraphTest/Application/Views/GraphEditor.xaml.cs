@@ -1,4 +1,5 @@
-﻿using NodeGraph;
+﻿using Newtonsoft.Json;
+using NodeGraph;
 using NodeGraph.Model;
 
 using System;
@@ -7,7 +8,8 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-
+using System.Xml;
+using WpfNodeGraphTest.Application.Controls;
 using WpfNodeGraphTest.NGraph;
 
 namespace WpfNodeGraphTest.Application.Views {
@@ -24,22 +26,24 @@ namespace WpfNodeGraphTest.Application.Views {
             InitializeComponent();
         }
 
-        public NodeGraphManager NodeGraphManager { get; private set; }
+        public NodeGraphManager nodeGraphManager { get; private set; }
         public FlowChart FlowChart { get; set; }
 
         private void Window_Loaded(object sender, RoutedEventArgs e) {
-            if (NodeGraphManager == null) {
-                NodeGraphManager = new NodeGraphManager();
+            if (nodeGraphManager == null) {
+                nodeGraphManager = new NodeGraphManager();
 
-                FlowChart = NodeGraphManager.CreateFlowChart(false, Guid.NewGuid(), typeof(FlowChart));
+                FlowChart = nodeGraphManager.CreateFlowChart(false, Guid.NewGuid(), typeof(FlowChart));
                 ViewModel.FlowChartViewModel = FlowChart.ViewModel;
 
-                NodeGraphManager.BuildFlowChartContextMenu += NodeGraphManager_BuildFlowChartContextMenu;
-                NodeGraphManager.BuildNodeContextMenu += NodeGraphManager_BuildNodeContextMenu;
-                NodeGraphManager.BuildFlowPortContextMenu += NodeGraphManager_BuildFlowPortContextMenu;
-                NodeGraphManager.BuildPropertyPortContextMenu += NodeGraphManager_BuildPropertyPortContextMenu;
+                var view = ViewModel.FlowChartViewModel.View;
 
-                NodeGraphManager.NodesDestroyed += NodeGraphManager_NodesDestroyed;
+                nodeGraphManager.BuildFlowChartContextMenu += NodeGraphManager_BuildFlowChartContextMenu;
+                nodeGraphManager.BuildNodeContextMenu += NodeGraphManager_BuildNodeContextMenu;
+                nodeGraphManager.BuildFlowPortContextMenu += NodeGraphManager_BuildFlowPortContextMenu;
+                nodeGraphManager.BuildPropertyPortContextMenu += NodeGraphManager_BuildPropertyPortContextMenu;
+
+                nodeGraphManager.NodesDestroyed += NodeGraphManager_NodesDestroyed;
             } else {
                 var x = 0;
             }
@@ -63,7 +67,7 @@ namespace WpfNodeGraphTest.Application.Views {
                 var NodeDescriptor = nodeType.GetCustomAttributes(typeof(CNodeDescriptor), false) as CNodeDescriptor[];
 
                 if (NodeDescriptor.Length > 0)
-                    menuItem.Header = "Create " + NodeDescriptor[0].Title;
+                     menuItem.Header = "Create " + NodeDescriptor[0].Title;
                 else menuItem.Header = "Create " + nodeType.Name;
 
                 menuItem.CommandParameter = nodeType;
@@ -81,7 +85,7 @@ namespace WpfNodeGraphTest.Application.Views {
 
             NodeGraph.View.FlowChartView flowChartView = ViewModel.FlowChartViewModel.View;
             
-            var node = NodeGraphManager.CreateNode(
+            var node = nodeGraphManager.CreateNode(
                 false, Guid.NewGuid(), ViewModel.FlowChartViewModel.Model, nodeType, _ContextMenuLocation.X, _ContextMenuLocation.Y, 0);
 
             node.InputFlowPorts.CollectionChanged += NodePortsChanged_Event;
@@ -119,7 +123,7 @@ namespace WpfNodeGraphTest.Application.Views {
                 var NodeDescriptor = nodeType.GetCustomAttributes(typeof(CNodeDescriptor), false) as CNodeDescriptor[];
 
                 if (NodeDescriptor.Length > 0)
-                    menuItem.Header = "Create " + NodeDescriptor[0].Title;
+                     menuItem.Header = "Create " + NodeDescriptor[0].Title;
                 else menuItem.Header = "Create " + nodeType.Name;
 
                 menuItem.CommandParameter = nodeType;
@@ -195,8 +199,28 @@ namespace WpfNodeGraphTest.Application.Views {
             return (0 < items.Count);
         }
 
-        private void saveToXmlClicked(object sender, RoutedEventArgs e) {
-            compileScript();
+        private void compileNodeToXMLFormat(object sender, RoutedEventArgs e) {
+            string xml = nodeGraphManager.SerializeToString();
+
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(xml);
+
+            string json = JsonConvert.SerializeXmlNode(doc, Newtonsoft.Json.Formatting.Indented);
+
+            makePopoutTextWindow("Compiled JSON", json, AvalonEditGlobalStyling.SyntaxLanguage.CSharp);
+            makePopoutTextWindow("Compiled XML", xml, AvalonEditGlobalStyling.SyntaxLanguage.CSharp);
+        }
+
+        private void makePopoutTextWindow(string title, string text, AvalonEditGlobalStyling.SyntaxLanguage lang) {
+            var x = new Window();
+            var editor = new AvalonEdit();
+            editor.Syntax = lang;
+            editor.Text = text;
+            editor.ShowLineNumbers = true;
+
+            x.Content = editor;
+            x.Title = "Compiled";
+            x.Show();
         }
 
 

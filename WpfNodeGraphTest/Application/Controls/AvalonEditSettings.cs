@@ -21,6 +21,12 @@ namespace WpfNodeGraphTest.Application.Controls {
             Dark
         }
 
+        public enum SyntaxLanguage {
+            CSharp,
+            Javascript,
+            XML
+        }
+
         private static ColorStyle _ColorTheme = ColorStyle.Dark;
         public static ColorStyle ColorTheme {
             get { return _ColorTheme; }

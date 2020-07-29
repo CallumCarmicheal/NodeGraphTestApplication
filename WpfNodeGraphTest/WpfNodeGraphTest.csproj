@@ -54,6 +54,9 @@
     <Reference Include="Jsbeautifier, Version=0.0.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Jsbeautifier.0.0.1\lib\netstandard2.0\Jsbeautifier.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="PropertyTools, Version=2.0.1.0, Culture=neutral, PublicKeyToken=ea0c9f2b460934d0, processorArchitecture=MSIL">
       <HintPath>..\packages\PropertyTools.Wpf.2.0.1\lib\net45\PropertyTools.dll</HintPath>
     </Reference>
@@ -99,7 +102,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ImageFormat.cs" />
+    <Compile Include="CodeGenerator\JavascriptGen.cs" />
     <Compile Include="NGraph\Models\Functions\FnPrintString.cs" />
     <Compile Include="NGraph\Models\Operator\OpStringConcat.cs" />
     <Compile Include="NGraph\Models\Operator\OpIntegerAdd.cs" />
@@ -171,11 +174,15 @@
     <EmbeddedResource Include="Resources\CSharp-Light.xshd" />
     <EmbeddedResource Include="Resources\Javascript-Dark.xshd" />
     <EmbeddedResource Include="Resources\Javascript-Light.xshd" />
+    <EmbeddedResource Include="Resources\XmlDoc-Dark.xshd" />
+    <EmbeddedResource Include="Resources\XmlDoc-Light.xshd" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="CodeGenerator\Nodes\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NodeGraph\NodeGraph.csproj">
       <Project>{b650df81-3a89-4807-987b-aeee0e9ae242}</Project>

@@ -31,7 +31,7 @@ namespace WpfNodeGraphTest.NGraph {
 		public CNodeBase(NodeGraphManager ngm, Guid guid, FlowChart flowChart, CNodeType nodeType) : base(ngm, guid, flowChart) {
 #endif
 			_NodeType = nodeType;
-			AllowEditingHeader = false;
+			AllowEditingHeader = true;
 		}
 
 		#endregion // Constructor
@@ -58,13 +58,15 @@ namespace WpfNodeGraphTest.NGraph {
 			StateChanged?.Invoke(this);
 		}
 
+
+
 		#endregion
 
 		public abstract string CompileAsJavascript();
 
 
 		public delegate void DNodeStateChanged(CNodeBase node);
-		public event DNodeStateChanged StateChanged;
+        public event DNodeStateChanged StateChanged;
 
 		protected void RegisterStateChange() {
 			StateChanged?.Invoke(this);

@@ -50,7 +50,7 @@ namespace WpfNodeGraphTest.Application.Windows {
 #if (Debug_OldBugTesting)
                 NodeGraphManager.AddScreenLog(graph.FlowChart, "Hello world!");
 #else
-                graph.NodeGraphManager.AddScreenLog(graph.FlowChart, $"Found + {graph.ViewModel.FlowChartViewModel.InstanceGuid}!", 2000);
+                graph.nodeGraphManager.AddScreenLog(graph.FlowChart, $"Found + {graph.ViewModel.FlowChartViewModel.InstanceGuid}!", 2000);
 #endif
             }
         }

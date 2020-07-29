@@ -1,0 +1,128 @@
+﻿<Window x:Class="NodeGraphCalculator.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NodeGraphCalculator"
+		xmlns:ngv="clr-namespace:NodeGraph.View;assembly=NodeGraph"
+		xmlns:ngc="clr-namespace:NodeGraph.Controls;assembly=NodeGraph"
+		xmlns:v="clr-namespace:NodeGraphCalculator.View"
+		xmlns:pt="clr-namespace:PropertyTools.Wpf;assembly=PropertyTools.Wpf"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="720" Width="1280">
+	<Window.Resources>
+		<Style x:Key="CategoryTextBlockStyle" TargetType="TextBlock">
+			<Setter Property="TextAlignment" Value="Center"/>
+			<Setter Property="FontSize" Value="20"/>
+			<Setter Property="FontWeight" Value="ExtraBold"/>
+			<Setter Property="Background" Value="Black"/>
+			<Setter Property="Foreground" Value="White"/>
+			<Setter Property="VerticalAlignment" Value="Center"/>
+		</Style>
+	</Window.Resources>
+    <Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="5"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="5"/>
+			<RowDefinition Height="200"/>
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="200"/>
+			<ColumnDefinition Width="Auto"/>
+			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="Auto"/>
+			<ColumnDefinition Width="250"/>
+		</Grid.ColumnDefinitions>
+		<Grid Grid.Row ="0" Grid.ColumnSpan="5" Background="LightGray"/>
+		<Border Background="White" Grid.Row="1" Grid.Column="0" >
+			<StackPanel Orientation="Vertical">
+				<TextBlock TextAlignment="Center" Margin="0,5,0,5">Drag and drop items</TextBlock>
+				<!-- Variables -->
+				<TextBlock Height="30" Style="{StaticResource CategoryTextBlockStyle}">Variables</TextBlock>
+				<WrapPanel Orientation="Vertical">
+					<v:DragAndDropContent NodeType="VarInt">int</v:DragAndDropContent>
+				</WrapPanel>
+				<!-- Events -->
+				<TextBlock  Height="30" Style="{StaticResource CategoryTextBlockStyle}">Events</TextBlock>
+				<WrapPanel Orientation="Vertical">
+					<v:DragAndDropContent NodeType="EvtTick">Tick</v:DragAndDropContent>
+				</WrapPanel>
+				<!-- Operations -->
+				<TextBlock  Height="30" Style="{StaticResource CategoryTextBlockStyle}">Operators</TextBlock>
+				<WrapPanel>
+					<v:DragAndDropContent NodeType="OpPlus">&#x002B;</v:DragAndDropContent>
+					<v:DragAndDropContent NodeType="OpMinus">&#x002D;</v:DragAndDropContent>
+					<v:DragAndDropContent NodeType="OpMultiply">&#x00D7;</v:DragAndDropContent>
+					<v:DragAndDropContent NodeType="OpDivide">&#x00F7;</v:DragAndDropContent>
+					<v:DragAndDropContent NodeType="OpMakeArray">MakeArray</v:DragAndDropContent>
+					<v:DragAndDropContent NodeType="OpForEach">ForEach</v:DragAndDropContent>
+					<v:DragAndDropContent NodeType="OpPrint">Print</v:DragAndDropContent>
+				</WrapPanel>
+			</StackPanel>
+		</Border>		
+		<Grid Grid.Row="1" Grid.Column="1" Background="LightGray" VerticalAlignment="Stretch" Width="5"/>
+		<Grid Grid.Row="1" Grid.Column="2">
+			<ngv:FlowChartView DataContext="{Binding Path=FlowChartViewModel, RelativeSource={RelativeSource AncestorType={x:Type local:MainWindow}}}"/>
+		</Grid>
+		<Grid Grid.Row="1" Grid.Column="3" Background="LightGray" VerticalAlignment="Stretch" Width="5"/>
+		<Grid Grid.Row="1" Grid.RowSpan="3" Grid.Column="4">
+			<StackPanel Orientation="Vertical" Background="Gray">
+				<TextBlock Height="30" Style="{StaticResource CategoryTextBlockStyle}">Help</TextBlock>
+				<ScrollViewer Height="300" >
+					<TextBlock Background="White" Padding="10">
+						<LineBreak/><Run FontWeight="Bold" FontSize="14" Text="Connections"/>
+						<LineBreak/>
+						<LineBreak/>Drag-Drop between ports : Connects.
+						<LineBreak/>Ctrl + Left on port : Disconnects.
+						<LineBreak/>
+						<LineBreak/><Run FontWeight="Bold" FontSize="14" Text="Node Selections"/>
+						<LineBreak/>
+						<LineBreak/>Left : Select node and deselect all.
+						<LineBreak/>Ctrl + Left : XOR selection.
+						<LineBreak/>Shift + Left : Additive selection.
+						<LineBreak/>Alt + Left : Subtractive selection.
+						<LineBreak/>
+						<LineBreak/>Ctrl + Left Dragging : XOR selection.
+						<LineBreak/>Shift + Left Dragging : Additive selection.
+						<LineBreak/>Alt + Left Dragging: Subtractive selection.
+						<LineBreak/>
+						<LineBreak/>Ctrl + "A" : Select all nodes.
+						<LineBreak/>
+						<LineBreak/><Run FontWeight="Bold" FontSize="14" Text="Node Deletion"/>
+						<LineBreak/>
+						<LineBreak/> "Delete" : Delete selected nodes.
+						<LineBreak/>
+						<LineBreak/><Run FontWeight="Bold" FontSize="14" Text="Zoom And Pan"/>
+						<LineBreak/>
+						<LineBreak/>"F" : Focus selected nodes.
+						<LineBreak/>"A" : Focus all nodes.
+						<LineBreak/>Right Dragging on flowchart : Panning.
+						<LineBreak/>
+						<LineBreak/><Run FontWeight="Bold" FontSize="14" Text="History"/>
+						<LineBreak/>
+						<LineBreak/>Ctrl + "Z" : Undo.
+						<LineBreak/>Ctrl + "Y" : Redo.
+						<LineBreak/>
+						<LineBreak/><Run FontWeight="Bold" FontSize="14" Text="Save/Load"/>
+						<LineBreak/>
+						<LineBreak/>Ctrl + "S" : Save.
+						<LineBreak/>Ctrl + "O" : Load.
+					</TextBlock>
+				</ScrollViewer>					
+				<TextBlock  Height="30" Style="{StaticResource CategoryTextBlockStyle}">Properties</TextBlock>
+				<pt:PropertyGrid Height="300" Name="_PropertyGrid"/>
+			</StackPanel>
+		</Grid>
+		<Grid Grid.Row="2" Grid.ColumnSpan="4" HorizontalAlignment="Stretch" Height="5" Background="LightGray"/>
+		<StackPanel Orientation="Vertical" Grid.Row="3" Grid.ColumnSpan="4">
+			<TextBlock  Height="30" Style="{StaticResource CategoryTextBlockStyle}">Debug Outputs</TextBlock>
+			<StackPanel Orientation="Horizontal">
+				<Button Name="_ClearButton" Margin="5">Clear</Button>
+			</StackPanel>
+			<ScrollViewer Grid.Row="3" CanContentScroll="True">
+				<ListView Name="_OutputView"/>
+			</ScrollViewer>
+		</StackPanel>
+	</Grid>
+</Window>

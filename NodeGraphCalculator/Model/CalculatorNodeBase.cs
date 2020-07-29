@@ -1,4 +1,5 @@
-﻿using NodeGraph.Model;
+﻿using NodeGraph;
+using NodeGraph.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +30,7 @@ namespace NodeGraphCalculator.Model
 
 		#region Constructor
 
-		public CalculatorNodeBase( Guid guid, FlowChart flowChart, CalculatorNodeType nodeType ) : base( guid, flowChart )
+		public CalculatorNodeBase( NodeGraphManager ngm, Guid guid, FlowChart flowChart, CalculatorNodeType nodeType ) : base( ngm, guid, flowChart )
 		{
 			_NodeType = nodeType;
 		}

@@ -16,7 +16,7 @@ namespace NodeGraphCalculator.Model
 	{
 		#region Constructor
 
-		public OpPrintNode( Guid guid, FlowChart flowChart ) : base( guid, flowChart, CalculatorNodeType.OpPrint )
+		public OpPrintNode( NodeGraphManager ngm, Guid guid, FlowChart flowChart ) : base( ngm, guid, flowChart, CalculatorNodeType.OpPrint )
 		{
 			Header = "Print";
 			HeaderBackgroundColor = Brushes.DarkBlue;

@@ -29,7 +29,7 @@ namespace NodeGraphCalculator.Model
 
 		#region Constructor
 
-		public OpDivideNode( Guid guid, FlowChart flowChart ) : base( guid, flowChart, CalculatorNodeType.OpDivide )
+		public OpDivideNode( NodeGraphManager ngm, Guid guid, FlowChart flowChart ) : base( ngm, guid, flowChart, CalculatorNodeType.OpDivide )
 		{
 			Header = "Divide";
 			HeaderBackgroundColor = Brushes.DarkBlue;

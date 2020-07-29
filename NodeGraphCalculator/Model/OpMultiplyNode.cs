@@ -29,7 +29,7 @@ namespace NodeGraphCalculator.Model
 
 		#region Constructor
 
-		public OpMultiplyNode( Guid guid, FlowChart flowChart ) : base( guid, flowChart, CalculatorNodeType.OpMultiply )
+		public OpMultiplyNode( NodeGraphManager ngm, Guid guid, FlowChart flowChart ) : base( ngm, guid, flowChart, CalculatorNodeType.OpMultiply )
 		{
 			Header = "Multiply";
 			HeaderBackgroundColor = Brushes.DarkBlue;

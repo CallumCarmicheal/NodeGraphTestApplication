@@ -29,7 +29,7 @@ namespace NodeGraphCalculator.Model
 
 		#region Constructor
 
-		public OpPlusNode( Guid guid, FlowChart flowChart ) : base( guid, flowChart, CalculatorNodeType.OpPlus )
+		public OpPlusNode( NodeGraphManager ngm, Guid guid, FlowChart flowChart ) : base( ngm, guid, flowChart, CalculatorNodeType.OpPlus )
 		{
 			Header = "Plus";
 			HeaderBackgroundColor = Brushes.DarkBlue;

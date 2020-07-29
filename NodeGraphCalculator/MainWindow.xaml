@@ -5,10 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NodeGraphCalculator"
 		xmlns:ngv="clr-namespace:NodeGraph.View;assembly=NodeGraph"
-		xmlns:ngc="clr-namespace:NodeGraph.Controls;assembly=NodeGraph"
+		xmlns:ngc="clr-namespace:NodeGraph.Controls;assembly=NodeGraphMana"
+        xmlns:ngcvm="clr-namespace:NodeGraphCalculator.ViewModel"
 		xmlns:v="clr-namespace:NodeGraphCalculator.View"
 		xmlns:pt="clr-namespace:PropertyTools.Wpf;assembly=PropertyTools.Wpf"
         mc:Ignorable="d"
+        
+        d:DataContext="{d:DesignInstance Type=ngcvm:MainWindowViewModel, IsDesignTimeCreatable=True}"
+        
         Title="MainWindow" Height="720" Width="1280">
 	<Window.Resources>
 		<Style x:Key="CategoryTextBlockStyle" TargetType="TextBlock">
@@ -63,7 +67,7 @@
 		</Border>		
 		<Grid Grid.Row="1" Grid.Column="1" Background="LightGray" VerticalAlignment="Stretch" Width="5"/>
 		<Grid Grid.Row="1" Grid.Column="2">
-			<ngv:FlowChartView DataContext="{Binding Path=FlowChartViewModel, RelativeSource={RelativeSource AncestorType={x:Type local:MainWindow}}}"/>
+            <ngv:FlowChartView DataContext="{Binding FlowChartViewModel, UpdateSourceTrigger=PropertyChanged}"/>
 		</Grid>
 		<Grid Grid.Row="1" Grid.Column="3" Background="LightGray" VerticalAlignment="Stretch" Width="5"/>
 		<Grid Grid.Row="1" Grid.RowSpan="3" Grid.Column="4">

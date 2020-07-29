@@ -35,7 +35,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PropertyTools, Version=3.1.0.0, Culture=neutral, PublicKeyToken=ea0c9f2b460934d0, processorArchitecture=MSIL">
+      <HintPath>..\packages\PropertyTools.3.1.0-alpha0041\lib\net45\PropertyTools.dll</HintPath>
+    </Reference>
+    <Reference Include="PropertyTools.Wpf, Version=3.1.0.0, Culture=neutral, PublicKeyToken=ea0c9f2b460934d0, processorArchitecture=MSIL">
+      <HintPath>..\packages\PropertyTools.Wpf.3.1.0-alpha0041\lib\net45\PropertyTools.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -68,6 +75,8 @@
     <Compile Include="Model\OpPrintNode.cs" />
     <Compile Include="Model\VarIntArray.cs" />
     <Compile Include="Model\VarIntNode.cs" />
+    <Compile Include="ViewModel\ViewModelBase.cs" />
+    <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="View\DragAndDropContent.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -105,6 +114,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -113,9 +123,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ViewModel\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\NodeGraph\NodeGraph.csproj">
       <Project>{b650df81-3a89-4807-987b-aeee0e9ae242}</Project>

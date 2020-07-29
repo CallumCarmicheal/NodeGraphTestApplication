@@ -22,7 +22,7 @@ namespace NodeGraphCalculator.Model
 
 		#region Constructor
 
-		public EvtTickNode( Guid guid, FlowChart flowChart ) : base( guid, flowChart, CalculatorNodeType.EvtTick )
+		public EvtTickNode( NodeGraphManager ngm, Guid guid, FlowChart flowChart ) : base( ngm, guid, flowChart, CalculatorNodeType.EvtTick )
 		{
 			Header = "Tick";
 			HeaderBackgroundColor = Brushes.Maroon;

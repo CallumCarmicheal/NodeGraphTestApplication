@@ -1,4 +1,5 @@
-﻿using NodeGraph.Model;
+﻿using NodeGraph;
+using NodeGraph.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace NodeGraphCalculator.Model
 	{
 		#region Constructor
 
-		public VarIntNode( Guid guid, FlowChart flowChart ) : base( guid, flowChart, CalculatorNodeType.VarInt )
+		public VarIntNode( NodeGraphManager ngm, Guid guid, FlowChart flowChart ) : base( ngm, guid, flowChart, CalculatorNodeType.VarInt )
 		{
 			
 		}

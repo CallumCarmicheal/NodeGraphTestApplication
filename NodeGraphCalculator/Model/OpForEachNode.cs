@@ -18,7 +18,7 @@ namespace NodeGraphCalculator.Model
 	{
 		#region Constructor
 
-		public OpForEachNode( Guid guid, FlowChart flowChart ) : base( guid, flowChart, CalculatorNodeType.OpForEach )
+		public OpForEachNode( NodeGraphManager ngm, Guid guid, FlowChart flowChart ) : base( ngm, guid, flowChart, CalculatorNodeType.OpForEach )
 		{
 			Header = "ForEach";
 			HeaderBackgroundColor = Brushes.DarkBlue;

@@ -17,7 +17,7 @@ namespace NodeGraphCalculator.Model
 	{
 		#region Constructor
 
-		public OpMakeArrayNode( Guid guid, FlowChart flowChart ) : base( guid, flowChart, CalculatorNodeType.OpMakeArray )
+		public OpMakeArrayNode( NodeGraphManager ngm, Guid guid, FlowChart flowChart ) : base( ngm, guid, flowChart, CalculatorNodeType.OpMakeArray )
 		{
 			Header = "MakeArray";
 			HeaderBackgroundColor = Brushes.DarkBlue;

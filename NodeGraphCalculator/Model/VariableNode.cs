@@ -32,7 +32,7 @@ namespace NodeGraphCalculator.Model
 
 		#region Constructor
 
-		public VariableNode( Guid guid, FlowChart flowChart, CalculatorNodeType nodeType ) : base( guid, flowChart, nodeType )
+		public VariableNode( NodeGraphManager ngm, Guid guid, FlowChart flowChart, CalculatorNodeType nodeType ) : base( ngm, guid, flowChart, nodeType )
 		{
 			Header = typeof( T ).Name;
 			HeaderBackgroundColor = Brushes.Black;

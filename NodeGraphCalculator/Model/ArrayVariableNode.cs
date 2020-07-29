@@ -30,7 +30,7 @@ namespace NodeGraphCalculator.Model
 
 		#region Constructor
 
-		public ArrayVariableNode( Guid guid, FlowChart flowChart, CalculatorNodeType nodeType ) : base( guid, flowChart, nodeType )
+		public ArrayVariableNode( NodeGraphManager ngm, Guid guid, FlowChart flowChart, CalculatorNodeType nodeType ) : base( ngm, guid, flowChart, nodeType )
 		{
 			Header = "Array " + typeof( T ).Name;
 			HeaderBackgroundColor = Brushes.Black;

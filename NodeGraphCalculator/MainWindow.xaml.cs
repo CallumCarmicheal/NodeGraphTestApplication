@@ -1,7 +1,9 @@
 ﻿using NodeGraph;
 using NodeGraph.Model;
 using NodeGraph.View;
+
 using NodeGraphCalculator.Model;
+
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,28 +14,29 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
 
-namespace NodeGraphCalculator
-{
-	/// <summary>
-	/// Interaction logic for MainWindow.xaml
-	/// </summary>
-	public partial class MainWindow : Window
+namespace NodeGraphCalculator {
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
+    public partial class MainWindow : Window
 	{
 		#region Fields
 
 		private DispatcherTimer _Ticker = new DispatcherTimer();
 
-		#endregion // Fields
+        #endregion // Fields
 
-		#region Properties
+        #region Properties
 
-		public NodeGraph.ViewModel.FlowChartViewModel FlowChartViewModel
+        public ViewModel.MainWindowViewModel ViewModel { get => (ViewModel.MainWindowViewModel) DataContext; set => DataContext = value; }
+
+        public NodeGraph.ViewModel.FlowChartViewModel FlowChartViewModel
 		{
-			get { return ( NodeGraph.ViewModel.FlowChartViewModel )GetValue( FlowChartViewModelProperty ); }
-			set { SetValue( FlowChartViewModelProperty, value ); }
+            get => ViewModel.FlowChartViewModel;
+            set => ViewModel.FlowChartViewModel = value;
 		}
-		public static readonly DependencyProperty FlowChartViewModelProperty =
-			DependencyProperty.Register( "FlowChartViewModel", typeof( NodeGraph.ViewModel.FlowChartViewModel ), typeof( MainWindow ), new PropertyMetadata( null ) );
+
+        public NodeGraph.NodeGraphManager NodeGraphManager { get; set; }
 
 		#endregion // Properties
 
@@ -41,7 +44,10 @@ namespace NodeGraphCalculator
 
 		public MainWindow()
 		{
-			InitializeComponent();
+            ViewModel = new ViewModel.MainWindowViewModel();
+            NodeGraphManager = new NodeGraphManager();
+
+            InitializeComponent();
 
 			Loaded += MainWindow_Loaded;
 			Unloaded += MainWindow_Unloaded;
@@ -129,11 +135,15 @@ namespace NodeGraphCalculator
 
 		private void MainWindow_Loaded( object sender, RoutedEventArgs e )
 		{
-			NodeGraphManager.OutputDebugInfo = true;
+            // Squared borders
+            NodeGraphManager.Styling.NodeHeaderCornerRadius = new CornerRadius(0, 0, 0, 0);
+            NodeGraphManager.Styling.NodeCornerRadius = new CornerRadius(0, 0, 0, 0);
+
+            NodeGraphManager.OutputDebugInfo = true;
 			NodeGraphManager.SelectionMode = NodeGraph.SelectionMode.Include;
 
-			FlowChart flowChart = NodeGraphManager.CreateFlowChart( false, Guid.NewGuid(), typeof( FlowChart ) );
-			FlowChartViewModel = flowChart.ViewModel;
+            FlowChart flowChart = NodeGraphManager.CreateFlowChart( false, Guid.NewGuid(), typeof( FlowChart ) );
+			ViewModel.FlowChartViewModel = flowChart.ViewModel;
 
 			NodeGraphManager.BuildFlowChartContextMenu += NodeGraphManager_BuildFlowChartContextMenu;
 			NodeGraphManager.BuildNodeContextMenu += NodeGraphManager_BuildNodeContextMenu;
@@ -173,7 +183,7 @@ namespace NodeGraphCalculator
 				{
 					Guid flowChartGuid = FlowChartViewModel.Model.Guid;
 					FlowChartViewModel = null;
-					NodeGraph.NodeGraphManager.DestroyFlowChart( flowChartGuid );
+					NodeGraphManager.DestroyFlowChart( flowChartGuid );
 
 					if( NodeGraphManager.Deserialize( @"SerializationTest.xml" ) )
 					{
